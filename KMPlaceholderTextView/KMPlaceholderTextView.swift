@@ -29,8 +29,7 @@ open class KMPlaceholderTextView: UITextView {
     private struct Constants {
         static let defaultiOSPlaceholderColor = UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
     }
-  
-    public let placeholderLabel: UILabel = UILabel()
+    open let placeholderLabel: UILabel = UILabel()
     
     private var placeholderLabelConstraints = [NSLayoutConstraint]()
     
@@ -96,16 +95,10 @@ open class KMPlaceholderTextView: UITextView {
     }
     
     private func commonInit() {
-        #if swift(>=4.2)
-        let notificationName = UITextView.textDidChangeNotification
-        #else
-        let notificationName = NSNotification.Name.UITextViewTextDidChange
-        #endif
-      
         NotificationCenter.default.addObserver(self,
-            selector: #selector(textDidChange),
-            name: notificationName,
-            object: nil)
+                                               selector: #selector(textDidChange),
+                                               name: UITextView.textDidChangeNotification,
+                                               object: nil)
         
         placeholderLabel.font = font
         placeholderLabel.textColor = placeholderColor
@@ -135,7 +128,7 @@ open class KMPlaceholderTextView: UITextView {
             attribute: .width,
             multiplier: 1.0,
             constant: -(textContainerInset.left + textContainerInset.right + textContainer.lineFragmentPadding * 2.0)
-            ))
+        ))
         removeConstraints(placeholderLabelConstraints)
         addConstraints(newConstraints)
         placeholderLabelConstraints = newConstraints
@@ -151,15 +144,9 @@ open class KMPlaceholderTextView: UITextView {
     }
     
     deinit {
-      #if swift(>=4.2)
-      let notificationName = UITextView.textDidChangeNotification
-      #else
-      let notificationName = NSNotification.Name.UITextViewTextDidChange
-      #endif
-      
         NotificationCenter.default.removeObserver(self,
-            name: notificationName,
-            object: nil)
+                                                  name: UITextView.textDidChangeNotification,
+                                                  object: nil)
     }
     
 }
